@@ -1,0 +1,5 @@
+{
+  "name": "Copy of IntelliMonitor",
+  "description": "Um painel abrangente de monitoramento de infraestrutura visualizando métricas, serviços e alertas em múltiplos hosts.",
+  "requestFramePermissions": []
+}
