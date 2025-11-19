@@ -1,22 +1,39 @@
 import { User } from '../types';
-
-const MOCK_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock.token";
+import { getBackendUrl } from './mockData';
 
 export const login = async (username: string, password: string): Promise<User> => {
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 500));
+  const backendUrl = getBackendUrl();
+  if (!backendUrl) {
+    throw new Error('URL do Backend não configurada. Verifique as Configurações.');
+  }
 
-  if (username === 'admin' && password === 'admin') {
-    const user: User = {
-      id: 'u-1',
-      username: 'admin',
-      role: 'admin',
-      token: MOCK_TOKEN
-    };
+  try {
+    const response = await fetch(`${backendUrl}/api/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Credenciais inválidas');
+    }
+
+    // A resposta do backend agora deve ser o objeto User completo com o token
+    const user: User = data;
     localStorage.setItem('intelli_user', JSON.stringify(user));
     return user;
+
+  } catch (err: any) {
+    if (err.message.includes('Failed to fetch')) {
+        throw new Error('Não foi possível conectar ao servidor. Verifique a URL do backend e se ele está online.');
+    }
+    // Re-throw a mensagem de erro do backend ou uma genérica
+    throw err;
   }
-  throw new Error('Credenciais inválidas');
 };
 
 export const logout = () => {

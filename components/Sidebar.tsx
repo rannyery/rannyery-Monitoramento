@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Server, Bell, Settings, LogOut, Activity, Download, ChevronLeft, ChevronRight, Smartphone } from 'lucide-react';
+import { LayoutDashboard, Server, Bell, Settings, LogOut, Activity, Download, ChevronLeft, ChevronRight } from 'lucide-react';
 import { logout } from '../services/authService';
 
 interface Props {
@@ -40,10 +41,6 @@ const Sidebar: React.FC<Props> = ({ isCollapsed, toggleSidebar }) => {
         <NavLink to="/alerts" className={navClass} title="Alertas">
           <Bell className="w-5 h-5 flex-shrink-0" />
           {!isCollapsed && <span>Alertas</span>}
-        </NavLink>
-        <NavLink to="/notifications" className={navClass} title="Notificações">
-          <Smartphone className="w-5 h-5 flex-shrink-0" />
-          {!isCollapsed && <span>Notificações</span>}
         </NavLink>
          <NavLink to="/install" className={navClass} title="Instalação e Agente">
           <Download className="w-5 h-5 flex-shrink-0" />

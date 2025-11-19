@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { ShieldCheck, ServerCog, MessageSquare, Send } from 'lucide-react';
-import { MonitoredService, NotificationContact } from '../types';
 
-const NOTIFICATION_CONTACTS_KEY = 'intelli_notification_contacts';
-const RECOVERY_TEMPLATE_KEY = 'intelli_whatsapp_recovery_template';
-
-const DEFAULT_RECOVERY_TEMPLATE = `✅ *RECUPERAÇÃO IntelliMonitor* ✅
-
-Os seguintes serviços do servidor *{hostname}* foram restabelecidos:
-
-{services}
-
-Operação normalizada.`;
+import React from 'react';
+import { ShieldCheck, ServerCog } from 'lucide-react';
+import { MonitoredService } from '../types';
 
 interface Props {
   info: {
@@ -21,37 +11,7 @@ interface Props {
 }
 
 const RecoveryAlertModal: React.FC<Props> = ({ info }) => {
-  const [contacts, setContacts] = useState<NotificationContact[]>([]);
-
-  useEffect(() => {
-    try {
-        const storedContacts = localStorage.getItem(NOTIFICATION_CONTACTS_KEY);
-        if (storedContacts) {
-            setContacts(JSON.parse(storedContacts));
-        }
-    } catch (error) {
-        console.error("Failed to load contacts for notification", error);
-    }
-  }, []);
-
   if (!info) return null;
-
-  const getFormattedMessage = (): string => {
-    const template = localStorage.getItem(RECOVERY_TEMPLATE_KEY) || DEFAULT_RECOVERY_TEMPLATE;
-    const servicesString = info.services
-      .map(s => `- *${s.name}*`)
-      .join('\n');
-    return template
-      .replace('{hostname}', info.hostname)
-      .replace('{services}', servicesString);
-  };
-
-  const handleSend = (phone: string) => {
-    const message = getFormattedMessage();
-    const encodedMessage = encodeURIComponent(message);
-    const url = `https://wa.me/${phone}?text=${encodedMessage}`;
-    window.open(url, '_blank');
-  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
@@ -89,32 +49,6 @@ const RecoveryAlertModal: React.FC<Props> = ({ info }) => {
                   </ul>
               </div>
           </div>
-          
-          {/* WhatsApp Notification Section */}
-          <div className="border-t border-slate-800 pt-5">
-            <h4 className="font-semibold text-slate-200 mb-3 text-center flex items-center justify-center gap-2">
-                <MessageSquare className="w-5 h-5 text-blue-400" />
-                Notificar Equipe sobre a Recuperação
-            </h4>
-            {contacts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {contacts.map(contact => (
-                        <button
-                            key={contact.id}
-                            onClick={() => handleSend(contact.phone)}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg transition-colors text-sm"
-                        >
-                            <Send className="w-4 h-4"/> {contact.name}
-                        </button>
-                    ))}
-                </div>
-            ) : (
-                <p className="text-center text-slate-500 text-sm">
-                    Nenhum contato de notificação configurado.
-                </p>
-            )}
-          </div>
-
         </div>
       </div>
     </div>

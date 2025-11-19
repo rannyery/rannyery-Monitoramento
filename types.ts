@@ -1,3 +1,4 @@
+
 export type HostStatus = 'healthy' | 'warning' | 'critical' | 'offline';
 export type OSType = 'linux' | 'windows';
 export type AlertSeverity = 'info' | 'warning' | 'critical';
@@ -102,10 +103,4 @@ export interface User {
   username: string;
   role: 'admin' | 'viewer';
   token: string;
-}
-
-export interface NotificationContact {
-  id: string;
-  name: string;
-  phone: string;
 }

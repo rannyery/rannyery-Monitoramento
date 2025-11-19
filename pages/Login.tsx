@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { login } from '../services/authService';
-import { Activity, Lock, User } from 'lucide-react';
+import { Activity, Lock, User, Settings } from 'lucide-react';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ const Login: React.FC = () => {
     try {
       await login(username, password);
       navigate(from, { replace: true });
-    } catch (err) {
-      setError('Usuário ou senha inválidos (tente admin/admin)');
+    } catch (err: any) {
+      setError(err.message || 'Usuário ou senha inválidos');
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2.5 pl-10 pr-4 text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-                placeholder="admin"
+                placeholder="usuário"
               />
             </div>
           </div>
@@ -87,8 +87,12 @@ const Login: React.FC = () => {
             {isLoading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
-        <div className="mt-6 text-center text-xs text-slate-500">
-          <p>Credenciais Demo: admin / admin</p>
+
+        <div className="text-center mt-8 pt-6 border-t border-slate-800">
+            <Link to="/settings" className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors">
+                <Settings className="w-4 h-4" />
+                Configurar URL do Backend
+            </Link>
         </div>
       </div>
     </div>
