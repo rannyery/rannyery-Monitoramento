@@ -7,6 +7,9 @@
   <title>IntelliMonitor</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Shim for libraries expecting Node.js 'process'
+    window.process = { env: {} };
+    
     tailwind.config = {
       theme: {
         extend: {
@@ -30,6 +33,8 @@
       }
     }
   </script>
+  <!-- Carrega configuração global externa -->
+  <script src="./env-config.js"></script>
 <script type="importmap">
 {
   "imports": {
@@ -46,8 +51,10 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body class="h-full text-slate-300">
   <div id="root" class="h-full"></div>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>

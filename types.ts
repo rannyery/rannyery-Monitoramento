@@ -2,7 +2,16 @@
 export type HostStatus = 'healthy' | 'warning' | 'critical' | 'offline';
 export type OSType = 'linux' | 'windows';
 export type AlertSeverity = 'info' | 'warning' | 'critical';
-export type ServiceStatus = 'active' | 'inactive' | 'failed';
+export type ServiceStatus = 'active' | 'inactive' | 'failed' | 'warning';
+
+// Adiciona definição global para o arquivo de config
+declare global {
+  interface Window {
+    INTELLI_CONFIG?: {
+      backendUrl?: string;
+    };
+  }
+}
 
 export interface MetricPoint {
   timestamp: number;
@@ -98,9 +107,19 @@ export interface Alert {
   resolvedAt?: number;
 }
 
+export interface UserGroup {
+  id: number;
+  name: string;
+  description: string;
+  created_at?: string;
+}
+
 export interface User {
-  id:string;
+  id: string;
   username: string;
-  role: 'admin' | 'viewer';
+  role: 'admin' | 'viewer' | 'operador' | string;
+  group_id?: number;
+  group_name?: string;
   token: string;
+  created_at?: string;
 }
